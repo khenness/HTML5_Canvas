@@ -187,9 +187,10 @@ function Body(position, mass, velocity, pinned) {
 Body.prototype.getRotationAngle = function() {
    //var angleInRadians = Math.atan2(p2.y - p1.y, p2.x - p1.x);
    //var angleInRadians = Math.atan2(this.velocity.y - this.position.y, this.velocity.x - this.position.x);
-   var angleInRadians = Math.atan2(this.velocity.y - this.position.y, this.velocity.x - this.position.x);
-   //var angleInRadians = Math.atan2(this.velocity.y + this.position.y, this.velocity.x + this.position.x);
-   var angleInRadians = Math.atan2(0 - this.velocity.y, 0 - this.velocity.x);
+   //var angleInRadians = Math.atan2(0 - (this.velocity.y - this.position.y), 0- (this.velocity.x - this.position.x));
+   //var angleInRadians = Math.atan2(this.position.y - this.velocity.y, this.position.x - this.velocity.x);
+   var angleInRadians = Math.atan2(0 - this.velocity.y, 0 - this.velocity.x)-Math.PI/2;  //Why do I need to take away 90 degrees???
+   
    return angleInRadians;
 }
 
@@ -227,19 +228,20 @@ Body.prototype.draw = function(ctx) {
      ctx.shadowOffsetY = 0;  
 */
     //draw circumcircle
-    ctx.beginPath();
+    /*ctx.beginPath();
     ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
     ctx.fillStyle = 'black';
     ctx.stroke();
-    
+    */
     //draw triangle
     var topTrianglePoint = new vector(this.position.x, this.position.y-this.radius)
     
     ctx.save();
     //ctx.rotate(Math.PI/4);
     ctx.translate(this.position.x, this.position.y); 
-    //ctx.rotate(Math.PI/4); // Rotate 45 degrees
-    ctx.rotate(Math.PI/this.getRotationAngle());
+    //ctx.rotate(Math.PI/2); // Rotate 45 degrees
+    ctx.rotate(this.getRotationAngle());
+    
     ctx.beginPath();
     ctx.fillStyle = 'black';
     /*ctx.moveTo(topTrianglePoint.x,topTrianglePoint.y);
@@ -286,8 +288,8 @@ Body.prototype.updateforcamera = function(CameraVariable) {
 
 //update the Body's position
 Body.prototype.move = function(CentreOfView) {
-  this.position.x = this.position.x + this.velocity.x ;
-  this.position.y = this.position.y + this.velocity.y;
+  this.position.x = (this.position.x + this.velocity.x);
+  this.position.y = (this.position.y + this.velocity.y);
   
 }
 
