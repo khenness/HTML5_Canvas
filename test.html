@@ -176,7 +176,30 @@ function Body(position, mass, velocity, pinned) {
   this.mass = mass;
   this.velocity = velocity;
   this.pinned = pinned;
+  this.radius = 15;
+  
+  this.fontmostpoint = this.getFrontMostPoint();
+  //this.vertices = [];
+  
 }
+
+Body.prototype.getFrontMostPoint = function() {
+   var frontMostPoint = new vector(0,0);
+   frontMostPoint.x =  this.position.x + this.velocity.x;
+   frontMostPoint.y =  this.position.y + this.velocity.y;
+   
+   
+   return frontMostPoint;
+}
+
+//get the radius
+Body.prototype.getradius = function() {
+   var radius = (Math.log(this.mass))/2;
+   //var radius = this.mass;
+   return radius;
+}
+
+
 //get the radius
 Body.prototype.getradius = function() {
    var radius = (Math.log(this.mass))/2;
@@ -188,7 +211,7 @@ Body.prototype.draw = function(ctx) {
   
   
  /* ctx.beginPath();
-  ctx.arc(this.position.x, this.position.y, this.getradius(), 0, 2 * Math.PI, false);
+  ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
   ctx.fillStyle = 'red';
   ctx.fill();
      ctx.shadowColor = 'orange';
@@ -201,13 +224,37 @@ Body.prototype.draw = function(ctx) {
      ctx.shadowOffsetX = 0;
      ctx.shadowOffsetY = 0;  
 */
-    var radius = 15;
+    //draw circumcircle
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'black';
+    ctx.stroke();
+    
+    //draw triangle
+    var topTrianglePoint = new vector(this.position.x, this.position.y-this.radius)
+    
+    //ctx.save();
+    //ctx.translate(this.position.x, this.position.y); 
+    //ctx.rotate(Math.PI/4); // Rotate 45 degrees
+
     ctx.beginPath();
     ctx.fillStyle = 'black';
-    ctx.moveTo(this.position.x,this.position.y+radius);
-    ctx.lineTo(this.position.x+(radius/2),this.position.y);
-    ctx.lineTo(this.position.x-(radius/2),this.position.y);
-    //ctx.lineTo(this.position.x,this.position.y+this.radius);
+    ctx.moveTo(this.position.x,this.position.y-this.radius);
+    ctx.lineTo(this.position.x+(this.radius/2),this.position.y);
+    ctx.lineTo(this.position.x-(this.radius/2),this.position.y);
+    ctx.closePath();
+    ctx.stroke();
+    
+    //ctx.restore();
+    
+    
+    
+
+    
+    
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, 2, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'yellow';
     ctx.fill();
 
 	 
