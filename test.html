@@ -177,20 +177,22 @@ function Body(position, mass, velocity, pinned) {
   this.velocity = velocity;
   this.pinned = pinned;
   this.radius = 15;
-  
-  this.fontmostpoint = this.getFrontMostPoint();
+  //this.angleInRadians =0;
+  //this.fontmostpoint = this.getFrontMostPoint();
   //this.vertices = [];
   
 }
 
-Body.prototype.getFrontMostPoint = function() {
-   var frontMostPoint = new vector(0,0);
-   frontMostPoint.x =  this.position.x + this.velocity.x;
-   frontMostPoint.y =  this.position.y + this.velocity.y;
-   
-   
-   return frontMostPoint;
+//gets the rotation angle in radians 
+Body.prototype.getRotationAngle = function() {
+   //var angleInRadians = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+   //var angleInRadians = Math.atan2(this.velocity.y - this.position.y, this.velocity.x - this.position.x);
+   var angleInRadians = Math.atan2(this.velocity.y - this.position.y, this.velocity.x - this.position.x);
+   //var angleInRadians = Math.atan2(this.velocity.y + this.position.y, this.velocity.x + this.position.x);
+   var angleInRadians = Math.atan2(0 - this.velocity.y, 0 - this.velocity.x);
+   return angleInRadians;
 }
+
 
 //get the radius
 Body.prototype.getradius = function() {
@@ -233,19 +235,26 @@ Body.prototype.draw = function(ctx) {
     //draw triangle
     var topTrianglePoint = new vector(this.position.x, this.position.y-this.radius)
     
-    //ctx.save();
-    //ctx.translate(this.position.x, this.position.y); 
+    ctx.save();
+    //ctx.rotate(Math.PI/4);
+    ctx.translate(this.position.x, this.position.y); 
     //ctx.rotate(Math.PI/4); // Rotate 45 degrees
-
+    ctx.rotate(Math.PI/this.getRotationAngle());
     ctx.beginPath();
     ctx.fillStyle = 'black';
-    ctx.moveTo(this.position.x,this.position.y-this.radius);
+    /*ctx.moveTo(topTrianglePoint.x,topTrianglePoint.y);
     ctx.lineTo(this.position.x+(this.radius/2),this.position.y);
     ctx.lineTo(this.position.x-(this.radius/2),this.position.y);
+    */
+    //remember, translate moves everything to 0,0
+    ctx.moveTo(0,0-this.radius);
+    ctx.lineTo(0+(this.radius/2),0);
+    ctx.lineTo(0-(this.radius/2),0);
+    
     ctx.closePath();
     ctx.stroke();
-    
-    //ctx.restore();
+    //ctx.fill();
+    ctx.restore();
     
     
     
